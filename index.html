@@ -80,6 +80,25 @@
     }
     #start-btn:active { transform: scale(0.95); }
     .hidden { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+
+    #sys-log-window {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 80%;
+      height: 30%;
+      background: rgba(0, 0, 0, 0.7);
+      color: #0f0;
+      font-family: monospace;
+      font-size: 12px;
+      overflow-y: auto;
+      z-index: 100;
+      pointer-events: none;
+      padding: 10px;
+      border-radius: 5px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
   </style>
 </head>
 <body>
@@ -89,6 +108,45 @@
       <button id="start-btn">進入遊戲</button>
     </div>
   </div>
+  <div id="sys-log-window"></div>
+  <script>
+    (function() {
+      const logWindow = document.getElementById('sys-log-window');
+      const originalLog = console.log;
+      const originalError = console.error;
+      const originalWarn = console.warn;
+
+      function appendLog(type, args) {
+        const msg = Array.from(args).map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg).join(' ');
+        const logLine = document.createElement('div');
+        logLine.textContent = `[${type}] ${msg}`;
+        if (type === 'ERROR') logLine.style.color = '#f00';
+        if (type === 'WARN') logLine.style.color = '#ff0';
+        logWindow.appendChild(logLine);
+        logWindow.scrollTop = logWindow.scrollHeight;
+      }
+
+      console.log = function() {
+        appendLog('LOG', arguments);
+        originalLog.apply(console, arguments);
+      };
+      console.error = function() {
+        appendLog('ERROR', arguments);
+        originalError.apply(console, arguments);
+      };
+      console.warn = function() {
+        appendLog('WARN', arguments);
+        originalWarn.apply(console, arguments);
+      };
+
+      window.addEventListener('error', function(e) {
+        console.error(e.message, e.filename, e.lineno);
+      });
+      window.addEventListener('unhandledrejection', function(e) {
+        console.error('Unhandled Promise Rejection:', e.reason);
+      });
+    })();
+  </script>
   <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
