@@ -52,7 +52,6 @@ startBtn.addEventListener('click', async () => {
   await requestGyroPermission();
   startOverlay.classList.add('hidden');
   
-  await RAPIER.init();
   physicsWorld = new RAPIER.World({ x: 0.0, y: -9.81, z: 0.0 });
   
   initThree();
@@ -137,7 +136,7 @@ function createPhysicsEnvironment() {
     bottleGroup.position.set(x, 0, z);
     scene.add(bottleGroup);
 
-    const bBody = physicsWorld.createRigidBody(RAPIER.RigidBodyDesc.dynamic().setTranslation(x, 0.6, z).setMass(1.0));
+    const bBody = physicsWorld.createRigidBody(RAPIER.RigidBodyDesc.dynamic().setTranslation(x, 0.6, z).setAdditionalMass(1.0));
     physicsWorld.createCollider(RAPIER.ColliderDesc.cylinder(0.6, 0.2), bBody);
     physicsPairs.push({ mesh: bottleGroup, body: bBody });
   }
