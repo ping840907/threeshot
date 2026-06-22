@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Mobile 3D Landscape Game</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    html, body {
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      background-color: #1a1a1a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      touch-action: none;
+      overscroll-behavior: none;
+    }
+
+    /* 🚀 魔術遊戲容器：核心強製橫屏外觀設計 */
+    #game-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* 當手機處於直向（或系統鎖定直向）時，強制將容器旋轉 90 度變橫向 */
+    @media (orientation: portrait) {
+      #game-container {
+        width: 100vh;   /* 寬度取用螢幕高度 */
+        height: 100vw;  /* 高度取用螢幕寬度 */
+        transform: rotate(90deg);
+        transform-origin: 0 0;
+        left: 100vw;    /* 旋轉後將坐標系修正回螢幕可視區 */
+      }
+    }
+
+    #game-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+
+    #start-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      background: radial-gradient(circle, #2c3e50, #0f172a);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    #start-btn {
+      padding: 16px 40px;
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #ffffff;
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #start-btn:active { transform: scale(0.95); }
+    .hidden { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+  </style>
+  <script type="module" crossorigin src="/assets/index-S3Gxc9aU.js"></script>
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="game-canvas"></canvas>
+    <div id="start-overlay">
+      <button id="start-btn">進入遊戲</button>
+    </div>
+  </div>
+</body>
+</html>
