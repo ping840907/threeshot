@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Mobile 3D Low-Poly Game</title>
+  <title>Mobile 3D Landscape Game</title>
   <style>
-    /* 消除手機端預設邊距與滾動條 */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      -webkit-user-select: none; /* 防止長按選取文字 */
+      -webkit-user-select: none;
       user-select: none;
     }
     html, body {
@@ -19,23 +18,40 @@
       height: 100%;
       background-color: #1a1a1a;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      
-      /* 🚀 專家手遊優化：全面封鎖瀏覽器預設的網頁縮放、下拉重整與側滑上一頁手勢 */
       touch-action: none;
       overscroll-behavior: none;
     }
-    /* 遊戲畫面 Canvas */
+
+    /* 🚀 魔術遊戲容器：核心強製橫屏外觀設計 */
+    #game-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* 當手機處於直向（或系統鎖定直向）時，強制將容器旋轉 90 度變橫向 */
+    @media (orientation: portrait) {
+      #game-container {
+        width: 100vh;   /* 寬度取用螢幕高度 */
+        height: 100vw;  /* 高度取用螢幕寬度 */
+        transform: rotate(90deg);
+        transform-origin: 0 0;
+        left: 100vw;    /* 旋轉後將坐標系修正回螢幕可視區 */
+      }
+    }
+
     #game-canvas {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 1;
-      /* 確保 Canvas 本身也不會觸發任何瀏覽器預設手勢 */
-      touch-action: none; 
+      touch-action: none;
     }
-    /* 進入遊戲開始畫面 */
+
     #start-overlay {
       position: absolute;
       top: 0;
@@ -48,7 +64,6 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      transition: opacity 0.5s ease;
     }
     #start-btn {
       padding: 16px 40px;
@@ -61,25 +76,20 @@
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
       outline: none;
-      -webkit-tap-highlight-color: transparent; /* 消除 iOS 點擊時的灰色高亮方塊 */
+      -webkit-tap-highlight-color: transparent;
     }
-    #start-btn:active {
-      transform: scale(0.95);
-    }
-    .hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
+    #start-btn:active { transform: scale(0.95); }
+    .hidden { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
   </style>
 </head>
 <body>
-  <canvas id="game-canvas"></canvas>
-
-  <div id="start-overlay">
-    <button id="start-btn">進入遊戲</button>
+  <div id="game-container">
+    <canvas id="game-canvas"></canvas>
+    <div id="start-overlay">
+      <button id="start-btn">進入遊戲 (橫向模式)</button>
+    </div>
   </div>
-
   <script type="module" src="/src/main.ts"></script>
 </body>
-</html>
-
+</h
+  tml>
