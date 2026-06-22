@@ -116,8 +116,7 @@ export class MultiplayerManager {
     const lerpFactor = 0.15;
     this.remotePlayers.forEach((player) => {
       player.mesh.position.lerp(player.targetPosition, lerpFactor);
-      player.mesh.quaternion.slerp(player.targetQuaternion, lerpFac
-                                   tor);
+      player.mesh.quaternion.slerp(player.targetQuaternion, lerpFactor);
     });
   }
 }
