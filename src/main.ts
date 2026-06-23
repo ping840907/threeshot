@@ -43,7 +43,12 @@ function getGameSize() {
   };
 }
 
-startBtn.addEventListener('click', async () => {
+let isGameStarted = false;
+
+async function startGame() {
+  if (isGameStarted) return;
+  isGameStarted = true;
+
   // 🚀 第一道保險：嘗試原生鎖定橫屏 (Android Chrome 支援)
   if (screen.orientation && (screen.orientation as any).lock) {
     try { await (screen.orientation as any).lock('landscape'); } catch (e) { console.log("瀏覽器不支援 API 自動鎖定橫屏，啟用 CSS 防線。"); }
@@ -61,7 +66,13 @@ startBtn.addEventListener('click', async () => {
   multiplayerManager.onRemoteFire((startPos, launchDir, speed) => {
     spawnRubberBand(startPos, launchDir, speed, false);
   });
-});
+}
+
+startBtn.addEventListener('click', startGame);
+startBtn.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  startGame();
+}, { passive: false });
 
 async function requestGyroPermission() {
   const DeviceOrientation = DeviceOrientationEvent as unknown as DeviceOrientationEventWithPermission;
